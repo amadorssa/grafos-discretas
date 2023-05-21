@@ -37,9 +37,21 @@ bool sonAdyacentes(int* matriz, int n, int vertice1, int vertice2) {
 
 }
 
-void userMenu(int choice, int* matriz, int* grafica, int n) {
-    int vertice1, vertice2; // Move the variable declaration outside the switch statement
+int calcularGradoVertice(int* matriz, int n, int vertice) {
+    int grado = 0;
+    
+    for (int i = 0; i < n; i++) {
+        if (matriz[vertice * n + i] != 0) {
+            grado++;
+        }
+    }
+    return grado;
+}
 
+int vertice1, vertice2, grado;
+bool adyacentes;
+
+void userMenu(int choice, int* matriz, int* grafica, int n) {
     switch (choice) {
 
         case 1: // Imprimir matriz de adyacencia
@@ -55,31 +67,36 @@ void userMenu(int choice, int* matriz, int* grafica, int n) {
         case 2: // Verificar si dos vértices son adyacentes
 
             do {
-                cout << "Ingresa el vértice 1: ";
+                cout << "Ingresa el vértice 1 [1," << n << "]: ";
                 cin >> vertice1;
-            } while (vertice1 < 0 || vertice1 >= n);
+            } while (vertice1 < 1 || vertice1 > n);
             
             do {
-                cout << "Ingresa el vértice 2: ";
+                cout << "Ingresa el vértice 2 [1," << n << "]: ";
                 cin >> vertice2;
-            } while (vertice2 < 0 || vertice2 >= n);
+            } while (vertice2 < 1 || vertice2 > n);
 
-            bool adyacentes = sonAdyacentes(matriz, n, vertice1, vertice2);
-            if (adyacentes) {
-                cout << "Los vértices " << vertice1 << " y " << vertice2 << " son adyacentes." << endl;
-            } else {
-                cout << "Los vértices " << vertice1 << " y " << vertice2 << " no son adyacentes." << endl;
-            }
+            adyacentes = sonAdyacentes(matriz, n, vertice1-1, vertice2-1);
+                if (adyacentes) {
+                    cout << endl << "Los vértices " << vertice1 << " y " << vertice2 << " son adyacentes." << endl;
+                } else {
+                    cout << endl << "Los vértices " << vertice1 << " y " << vertice2 << " no son adyacentes." << endl;
+                }
             break;
 
-        case 3: // Calcular el grado de un vértice de una gráfica
-            cout << "Opción 3 seleccionada." << endl;
+        case 3: // Calcular el grado de un vértice
+            do {
+                cout << "Ingresa el vértice al que deseas calcular el grado [1," << n << "]: ";
+                cin >> vertice1;
+            } while (vertice1 < 1 || vertice1 > n);
+            
+            grado = calcularGradoVertice(matriz, n, vertice1-1);  // Calcula el grado del vértice 0
+            cout << endl << "El grado del vértice " << vertice1 << " es: " << grado << endl;
             break;
 
         case 4: // Salir del programa
             liberarMemoria(grafica);
             cout << "Gracias por usar nuestro programa." << endl;
-            cout << "Autor: Amado Rosas" << endl;
             break;
 
         default:
